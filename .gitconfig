@@ -1,0 +1,74 @@
+# vim: ft=gitconfig
+
+[sendemail]
+  multiedit = true
+  suppresscc = self
+  smtpserver = smtp.gmail.com
+  smtpserverport = 587
+  smtpencryption = tls
+[color]
+  ui = true
+[filemerge]
+  executable = vimdiff
+[merge]
+  tool = vimdiff
+  ff = only
+[core]
+  whitespace = error,trailing-space,cr-at-eol,-blank-at-eof,tab-in-indent
+	excludesfile = ~/.gitignore
+  editor = /usr/bin/vim
+  pager = /usr/bin/less -XRS -x4
+[color "diff"]
+  whitespace = red reverse
+[user]
+  name = Billy Monk
+  email = billy.monk@gmail.com
+[gui]
+  fontui   = -family Inconsolata -size 14 -weight normal -slant roman -underline 0 -overstrike 0
+  fontdiff = -family Inconsolata -size 14 -weight normal -slant roman -underline 0 -overstrike 0
+[push]
+  default = simple
+[grep]
+  extendedRegexp = true
+  patternType = perl
+[gc]
+  autodetach = true
+[alias]
+  stat     = status
+  co       = checkout
+  ws       = diff-index --color --check HEAD
+  dcommit  = svn dcommit
+  p-log    = log --patch --parents
+  f-log    = whatchanged --graph --parents
+  q-log    = log --no-merges --graph --pretty=format:'%Cred%h%Creset - %C(green)%aN%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'
+  m-log    = log --graph --pretty=format:'%Cred%h%Creset - %C(green)%aN%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'
+  c-log    = !sh -c 'git q-log --cherry-mark HEAD..$@' -
+  s-log    = stash list --pretty=format:'%Cred%gd - %h%Creset - %C(green)%aN%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset'
+  svn-diff = diff remotes/git-svn
+  x        = !sh -c 'gitx'
+  grep-all = !sh -c 'git rev-list --all | xargs git grep \"${1}\"' -
+  whois    = !sh -c 'git log -i -1 --pretty=\"format::%an <%ae>\n\" --author=\"$1\"' -
+  up       = "!sh -c 'if [ -d .git/svn ]; then git svn rebase; else git pull --rebase $@; fi' -"
+  cp       = cherry-pick
+  commit   = commit --verbose
+  igrep    = grep --no-index
+  ngrep    = grep -A5 -B5
+  commit-amend = commit --amend -C HEAD
+  ca       = !sh -c 'git commit-amend $@' -
+  cv       = commit -v
+  show-stashes = "!sh -c 'if [ -n \"`git stash list`\" ]; then git show `git stash list --pretty=format:\"%gd\"`; else echo \"No stashes found\"; fi'"
+  show-unreachable = "!sh -c \"git fsck --unreachable | grep commit | awk '{print \\$3}' | xargs git show\" -"
+  frune    = fetch --prune
+  locate   = "!git ls-files | grep -i"
+  ocherry  = "!sh -c 'BRANCH=${1:-`git rev-parse --abbrev-ref HEAD`}; git cherry -v $BRANCH origin/$BRANCH' -"
+  odiff    = "!sh -c 'git diff $@ origin/${1:-`git rev-parse --abbrev-ref HEAD`}' -"
+  cleanup  = "!git frune && git prune && git gc --aggressive"
+  dups     = "!sh -c 'git log --no-merges --graph --pretty=format:'%s' ${1:-HEAD~1000}..HEAD | sort | uniq -c | sort -n' -"
+  pushup   = "!sh -c 'git push --set-upstream ${1:-origin} `git rev-parse --abbrev-ref HEAD`' -"
+  find     = "!git ls-files | grep -i"
+[pack]
+  threads = 0
+[branch]
+  autosetuprebase = always
+[filter "trimWhitespace"]
+	clean = git-stripspace
