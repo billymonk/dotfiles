@@ -18,3 +18,9 @@ function remove-vim-swap-files() {
     fi
   done
 }
+
+function git-clean-orig() {
+  for i in $(find . -name \*.orig); do
+    rm $i
+  done
+}
